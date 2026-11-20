@@ -33,3 +33,39 @@ def apply_for_permit(user_id, vehicle_id, zone):
 
 def list_permits(user_id):
     return permit_repository.list_by_user_id(user_id)
+
+
+def is_admin(user):
+    return bool(user and (user.get("is_admin") == 1 or user.get("role") == "admin"))
+
+
+def require_admin(user):
+    if not is_admin(user):
+        raise PermitError("Admin access required.")
+
+
+def list_pending_permits(user):
+    require_admin(user)
+    return permit_repository.list_pending_with_details()
+
+
+def list_pending(user):
+    return list_pending_permits(user)
+
+
+def update_permit_status(user, permit_id, status):
+    require_admin(user)
+    if status not in ("approved", "rejected"):
+        raise PermitError("Invalid permit status.")
+    if permit_repository.find_by_id(permit_id) is None:
+        raise PermitError("Permit not found.")
+    permit_repository.update_status(permit_id, status)
+    return True
+
+
+def approve_permit(user, permit_id):
+    return update_permit_status(user, permit_id, "approved")
+
+
+def reject_permit(user, permit_id):
+    return update_permit_status(user, permit_id, "rejected")

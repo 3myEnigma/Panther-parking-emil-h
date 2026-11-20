@@ -27,6 +27,7 @@
         <a href="{{ url_for('permits.index') }}">My permits</a>
         {% if g.user['is_admin'] or g.user['role'] == 'admin' %}
           <a href="{{ url_for('lots.manage') }}">Manage lots</a>
+          <a href="{{ url_for('permits.approve') }}">Approve permits</a>
         {% endif %}
         <span>{{ g.user['email'] }}</span> <a href="{{ url_for('auth.logout') }}">Log out</a>
       {% else %}

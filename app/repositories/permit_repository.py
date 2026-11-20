@@ -35,3 +35,41 @@ def find_by_id(permit_id):
 
 def list_by_user(user_id):
     return list_by_user_id(user_id)
+
+
+def list_pending_with_details():
+    rows = get_db().execute(
+        """
+        SELECT permit.id, permit.user_id, permit.vehicle_id, permit.zone,
+               permit.status, user.email AS driver_email,
+               vehicle.plate, vehicle.make, vehicle.model, vehicle.color
+        FROM permit
+        JOIN user ON user.id = permit.user_id
+        JOIN vehicle ON vehicle.id = permit.vehicle_id
+        WHERE permit.status = 'pending'
+        ORDER BY permit.id
+        """
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def list_pending():
+    return list_pending_with_details()
+
+
+def update_status(permit_id, status):
+    db = get_db()
+    cur = db.execute(
+        "UPDATE permit SET status = ? WHERE id = ?",
+        (status, permit_id),
+    )
+    db.commit()
+    return cur.rowcount
+
+
+def set_status(permit_id, status):
+    return update_status(permit_id, status)
+
+
+def list_all_pending():
+    return list_pending_with_details()
