@@ -4,6 +4,7 @@ COMP 3322 Software Engineering, Fall 2026. Team: **<team name>**
 
 | Member | GitHub username | Story I own |
 | --- | --- | --- |
+| Emil | 3myEnigma | Stories 2, 3, 4, 6 |
 | | | |
 | | | |
 | | | |
