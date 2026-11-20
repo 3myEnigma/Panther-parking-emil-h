@@ -19,3 +19,13 @@ def create(email, password_hash, role="driver"):
     )
     db.commit()
     return cur.lastrowid
+
+
+def set_admin(user_id, is_admin=True):
+    db = get_db()
+    value = 1 if is_admin else 0
+    db.execute(
+        "UPDATE user SET is_admin = ?, role = ? WHERE id = ?",
+        (value, "admin" if value else "driver", user_id),
+    )
+    db.commit()
