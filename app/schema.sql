@@ -6,7 +6,8 @@ CREATE TABLE user (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
     email         TEXT    NOT NULL UNIQUE,
     password_hash TEXT    NOT NULL,
-    role          TEXT    NOT NULL DEFAULT 'driver' CHECK (role IN ('driver', 'admin'))
+    role          TEXT    NOT NULL DEFAULT 'driver' CHECK (role IN ('driver', 'admin')),
+    is_admin      INTEGER NOT NULL DEFAULT 0 CHECK (is_admin IN (0, 1))
 );
 
 CREATE TABLE lot (

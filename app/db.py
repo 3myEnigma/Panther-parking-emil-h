@@ -24,6 +24,21 @@ def init_db():
         db.executescript(f.read().decode("utf8"))
 
 
+@click.command("make-admin")
+@click.argument("email")
+def make_admin_command(email):
+    """Promote an existing account to administrator."""
+    db = get_db()
+    cur = db.execute(
+        "UPDATE user SET is_admin = 1, role = 'admin' WHERE email = ?",
+        ((email or "").strip().lower(),),
+    )
+    db.commit()
+    if cur.rowcount == 0:
+        raise click.ClickException(f"No account found for {email}.")
+    click.echo(f"Promoted {email} to admin.")
+
+
 @click.command("init-db")
 def init_db_command():
     """Drop and recreate all tables, then load sample lots."""
@@ -34,3 +49,4 @@ def init_db_command():
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(make_admin_command)

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Manage lots</h1>
+
+<h2>{% if editing_lot %}Edit lot{% else %}Add lot{% endif %}</h2>
+<form method="post" action="{% if editing_lot %}{{ url_for('lots.edit', lot_id=editing_lot.id) }}{% else %}{{ url_for('lots.manage') }}{% endif %}">
+  {% if editing_lot %}<input type="hidden" name="lot_id" value="{{ editing_lot.id }}">{% endif %}
+  <label>Name
+    <input name="name" value="{{ editing_lot.name if editing_lot else '' }}" required>
+  </label>
+  <label>Zone
+    <input name="zone" value="{{ editing_lot.zone if editing_lot else '' }}" required>
+  </label>
+  <label>Capacity
+    <input name="capacity" type="number" min="1" value="{{ editing_lot.capacity if editing_lot else '' }}" required>
+  </label>
+  <button type="submit">{% if editing_lot %}Update lot{% else %}Create lot{% endif %}</button>
+</form>
+
+<h2>Existing lots</h2>
+<table>
+  <thead><tr><th>Lot</th><th>Zone</th><th>Capacity</th><th>Occupied</th><th>Action</th></tr></thead>
+  <tbody>
+  {% for lot in lots %}
+    <tr>
+      <td>{{ lot.name }}</td>
+      <td>{{ lot.zone }}</td>
+      <td>{{ lot.capacity }}</td>
+      <td>{{ lot.occupied }}</td>
+      <td><a href="{{ url_for('lots.edit', lot_id=lot.id) }}">Edit</a></td>
+    </tr>
+  {% else %}
+    <tr><td colspan="5">No lots yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
