@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Approve permits - Panther Parking{% endblock %}
+{% block content %}
+<h1>Approve permits</h1>
+
+<table>
+  <thead>
+    <tr><th>Driver</th><th>Vehicle</th><th>Zone</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+  {% for permit in permits %}
+    <tr>
+      <td>{{ permit.driver_email }}</td>
+      <td>{{ permit.plate }} - {{ permit.make }} {{ permit.model }} ({{ permit.color }})</td>
+      <td>{{ permit.zone }}</td>
+      <td>
+        <form method="post" action="{{ url_for('permits.approve_permit', permit_id=permit.id) }}" style="display:inline">
+          <button type="submit" name="approve" value="1">Approve</button>
+        </form>
+        <form method="post" action="{{ url_for('permits.reject_permit', permit_id=permit.id) }}" style="display:inline">
+          <button type="submit" name="reject" value="1">Reject</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="4">No pending permit applications.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

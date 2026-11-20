@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS permit;
 DROP TABLE IF EXISTS lot;
 DROP TABLE IF EXISTS vehicle;
 DROP TABLE IF EXISTS user;
@@ -26,6 +27,16 @@ CREATE TABLE vehicle (
     model   TEXT    NOT NULL,
     color   TEXT    NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user(id)
+);
+
+CREATE TABLE permit (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id    INTEGER NOT NULL,
+    vehicle_id INTEGER NOT NULL,
+    zone       TEXT    NOT NULL,
+    status     TEXT    NOT NULL DEFAULT 'pending',
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (vehicle_id) REFERENCES vehicle(id)
 );
 
 -- Sample data so the app shows something on first run.

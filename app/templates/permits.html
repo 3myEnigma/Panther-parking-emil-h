@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}My permits - Panther Parking{% endblock %}
+{% block content %}
+<h1>My permits</h1>
+
+<form method="post">
+  <label>Vehicle
+    <br>
+    <select name="vehicle_id" required>
+      <option value="">Select a vehicle</option>
+      {% for vehicle in vehicles %}
+        <option value="{{ vehicle.id }}">{{ vehicle.plate }} - {{ vehicle.make }} {{ vehicle.model }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Zone
+    <br>
+    <select name="zone" required>
+      <option value="">Select a zone</option>
+      {% for zone in zones %}
+        <option value="{{ zone }}">{{ zone }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <button type="submit">Apply for permit</button>
+</form>
+
+<table>
+  <thead><tr><th>Vehicle</th><th>Zone</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for permit in permits %}
+    <tr>
+      <td>{{ permit.plate }}</td>
+      <td>{{ permit.zone }}</td>
+      <td>{{ permit.status }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="3">No permits applied for.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
